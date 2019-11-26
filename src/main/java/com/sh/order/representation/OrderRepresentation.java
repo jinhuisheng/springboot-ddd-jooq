@@ -15,7 +15,7 @@ public class OrderRepresentation implements Representation {
     private String id;
     private List<com.sh.representation.OrderItemRepresentation> items;
     private BigDecimal totalPrice;
-    private OrderStatus status;
+//    private OrderStatus status;
     private Instant createdAt;
 
     public OrderRepresentation(String id,
@@ -26,7 +26,7 @@ public class OrderRepresentation implements Representation {
         this.id = id;
         this.items = items;
         this.totalPrice = totalPrice;
-        this.status = status;
+//        this.status = status;
         this.createdAt = createdAt;
     }
 
