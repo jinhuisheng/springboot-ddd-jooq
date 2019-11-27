@@ -1,4 +1,4 @@
-package com.sh.representation;
+package com.sh.order.representation;
 
 import com.sh.common.ddd.Representation;
 

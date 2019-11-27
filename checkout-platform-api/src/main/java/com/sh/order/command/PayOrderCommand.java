@@ -1,4 +1,4 @@
-package com.sh.command;
+package com.sh.order.command;
 
 import com.sh.common.ddd.Command;
 import com.fasterxml.jackson.annotation.JsonCreator;

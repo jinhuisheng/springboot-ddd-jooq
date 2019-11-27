@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Description:
  */
 @SpringBootApplication
-public class SpringJooqApplication {
+public class CheckoutPlatformApiApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SpringJooqApplication.class,args);
+        SpringApplication.run(CheckoutPlatformApiApplication.class,args);
     }
 }

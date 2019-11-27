@@ -13,13 +13,13 @@ import java.util.List;
 @Setter
 public class OrderRepresentation implements Representation {
     private String id;
-    private List<com.sh.representation.OrderItemRepresentation> items;
+    private List<OrderItemRepresentation> items;
     private BigDecimal totalPrice;
 //    private OrderStatus status;
     private Instant createdAt;
 
     public OrderRepresentation(String id,
-                               List<com.sh.representation.OrderItemRepresentation> items,
+                               List<OrderItemRepresentation> items,
                                BigDecimal totalPrice,
                                OrderStatus status,
                                Instant createdAt) {
