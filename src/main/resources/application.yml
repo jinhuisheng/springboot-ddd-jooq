@@ -18,3 +18,16 @@ ecommerce:
   order:
     jwtSecret: whateversecret
     jwtExpireMinutes: 30
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+    hibernate: DEBUG
+    root: info
+  pattern:
+    console: "%date{yyyy-MM-dd HH:mm:ss.SSS,Asia/Shanghai} %X{requestId}-%X{userId} %highlight(%-5level) %logger{36} : %m%n%wEx"
+    file: "%date{yyyy-MM-dd HH:mm:ss.SSS,Asia/Shanghai} %X{requestId}-%X{userId} %highlight(%-5level) %logger{36} : %m%n%wEx"
+  path: /data/application/restaurant/logs/
+  file: /data/application/restaurant/logs/restaurant-service.log

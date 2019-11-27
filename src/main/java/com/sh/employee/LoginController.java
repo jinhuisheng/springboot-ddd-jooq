@@ -1,20 +1,25 @@
-package com.sh.user;
+package com.sh.employee;
 
+import com.sh.common.logging.AutoNamingLoggerFactory;
 import com.sh.common.utils.ResponseBean;
+import com.sh.common.utils.RestResult;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/employee/")
 public class LoginController {
-
     private EmployeeApplicationService employeeApplicationService;
 
     @Autowired
@@ -23,20 +28,13 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseBean login(@RequestParam("username") String username,
-                              @RequestParam("password") String password) {
-        //todo add-feature login
-//        UserBean userBean = userService.getUser(username);
-//        if (userBean.getPassword().equals(password)) {
-        return new ResponseBean(200, "Login success", JWTUtil.sign("97f0fd9b-bd03-4c88-93de-30ed2be4ef7a", "123456"));
-//        } else {
-//            throw new UnauthorizedException();
-//        }
+    public RestResult login(@RequestBody @Valid LoginCommand loginCommand) {
+        return employeeApplicationService.login(loginCommand);
     }
 
     @GetMapping("/byId/{id}")
-    public Object getUser(@PathVariable(name = "id") String id) {
-        return employeeApplicationService.byId(id);
+    public RestResult getUser(@PathVariable(name = "id") String id) {
+        return RestResult.success(employeeApplicationService.byId(id));
     }
 
     @GetMapping("/article")

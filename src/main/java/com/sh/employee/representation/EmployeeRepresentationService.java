@@ -1,4 +1,4 @@
-package com.sh.user.representation;
+package com.sh.employee.representation;
 
 import co.cantina.spring.jooq.sample.model.Tables;
 import org.jooq.DSLContext;

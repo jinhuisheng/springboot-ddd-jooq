@@ -1,4 +1,4 @@
-package com.sh.user.shiro;
+package com.sh.employee.shiro;
 
 import org.apache.shiro.authc.AuthenticationToken;
 

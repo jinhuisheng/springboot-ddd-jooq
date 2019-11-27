@@ -1,4 +1,4 @@
-package com.sh.user.representation;
+package com.sh.employee.representation;
 
 import com.sh.common.ddd.Representation;
 import lombok.Getter;

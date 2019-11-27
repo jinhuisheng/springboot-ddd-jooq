@@ -1,6 +1,7 @@
-package com.sh.user;
+package com.sh.employee;
 
 import com.sh.common.ddd.AggregateRoot;
+import lombok.Getter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,19 +14,20 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "employee")
+@Getter
 public class Employee implements AggregateRoot {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     /**
-     * 工号
-     */
-    private String workNumber;
-    /**
      * 账号
      */
     private String accountNumber;
+    /**
+     * 工号
+     */
+    private String workNumber;
     /**
      * 员工姓名
      */
@@ -58,4 +60,8 @@ public class Employee implements AggregateRoot {
      * 商户Id
      */
     private Long merchantId;
+
+    public boolean isPasswordRight(String password) {
+        return this.password.equals(password);
+    }
 }

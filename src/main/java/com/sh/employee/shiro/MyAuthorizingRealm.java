@@ -1,8 +1,8 @@
-package com.sh.user.shiro;
+package com.sh.employee.shiro;
 
-import com.sh.user.EmployeeApplicationService;
-import com.sh.user.JWTUtil;
-import com.sh.user.representation.EmployeeRepresentation;
+import com.sh.employee.EmployeeApplicationService;
+import com.sh.employee.JWTUtil;
+import com.sh.employee.representation.EmployeeRepresentation;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
