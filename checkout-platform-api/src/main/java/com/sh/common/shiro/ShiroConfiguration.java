@@ -1,4 +1,4 @@
-package com.sh.employee.shiro;
+package com.sh.common.shiro;
 
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -17,6 +17,8 @@ import java.util.Map;
 
 @Configuration
 public class ShiroConfiguration {
+
+    public static final String UNAUTHORIZED_URL = "/employee/login/401";
 
     @Bean("securityManager")
     public DefaultWebSecurityManager getManager(MyAuthorizingRealm realm) {
@@ -51,7 +53,7 @@ public class ShiroConfiguration {
         factoryBean.setFilters(filterMap);
 
         factoryBean.setSecurityManager(securityManager);
-        factoryBean.setUnauthorizedUrl("/401");
+        factoryBean.setUnauthorizedUrl(UNAUTHORIZED_URL);
 
         /*
          * 自定义url规则
@@ -61,7 +63,7 @@ public class ShiroConfiguration {
         // 所有请求通过我们自己的JWT Filter
         filterRuleMap.put("/**", "jwt");
         // 访问401和404页面不通过我们的Filter
-        filterRuleMap.put("/401", "anon");
+        filterRuleMap.put(UNAUTHORIZED_URL, "anon");
         factoryBean.setFilterChainDefinitionMap(filterRuleMap);
         return factoryBean;
     }

@@ -1,5 +1,6 @@
 package com.sh.employee;
 
+import com.sh.common.configuration.vaildate.EnumValid;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
@@ -26,4 +27,11 @@ public class LoginCommand {
      */
     @NotBlank(message = "密码不能为空")
     private String password;
+
+    /**
+     * 客户端类型
+     */
+    @NotBlank(message = "客户端类型不能为空")
+    @EnumValid(target = ClientEnum.class, message = "type取值必须为:WINDOWS_CLIENT, ANDROID_CLIENT, MERCHANT_PLATFORM_CLIENT")
+    private String clientType;
 }

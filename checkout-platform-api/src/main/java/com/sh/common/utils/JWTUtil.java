@@ -1,4 +1,4 @@
-package com.sh.employee;
+package com.sh.common.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -12,12 +12,15 @@ import java.util.Date;
 public class JWTUtil {
 
     // 过期时间5分钟
-    private static final long EXPIRE_TIME = 5*60*1000;
-    public static final String USER_ID = "userId";
+    private static final long EXPIRE_TIME = 5 * 60 * 1000;
+    private static final String USER_ID = "userId";
+    private static final String CLIENT_TYPE = "clientType";
+    public static final String ROLE_ID = "roleId";
 
     /**
      * 校验token是否正确
-     * @param token 密钥
+     *
+     * @param token  密钥
      * @param secret 用户的密码
      * @return 是否正确
      */
@@ -36,30 +39,56 @@ public class JWTUtil {
 
     /**
      * 获得token中的信息无需secret解密也能获得
+     *
      * @return token中包含的用户Id
      */
     public static String getUserId(String token) {
+        return getValue(token, USER_ID);
+    }
+
+    /**
+     * 获得token中的客户端类型
+     *
+     * @return token中包含的clientType
+     */
+    public static String getClientType(String token) {
+        return getValue(token, CLIENT_TYPE);
+    }
+
+    /**
+     * 获得token中的客户端类型
+     *
+     * @return token中包含的clientType
+     */
+    public static String getRoleId(String token) {
+        return getValue(token, ROLE_ID);
+    }
+
+    private static String getValue(String token, String key) {
         try {
             DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim(USER_ID).asString();
+            return jwt.getClaim(key).asString();
         } catch (JWTDecodeException e) {
             return null;
         }
     }
 
+
     /**
      * 生成签名,5min后过期
-     * @param userId 用户名
-     * @param secret 用户的密码
+     *
+     * @param input
      * @return 加密的token
      */
-    public static String sign(String userId, String secret) {
+    public static String sign(JWTSignInput input) {
         try {
-            Date date = new Date(System.currentTimeMillis()+EXPIRE_TIME);
-            Algorithm algorithm = Algorithm.HMAC256(secret);
+            Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+            Algorithm algorithm = Algorithm.HMAC256(input.getSecret());
             // 附带username信息
             return JWT.create()
-                    .withClaim(USER_ID, userId)
+                    .withClaim(USER_ID, input.getUserId())
+                    .withClaim(CLIENT_TYPE, input.getClientType())
+                    .withClaim(ROLE_ID, input.getRoleId())
                     .withExpiresAt(date)
                     .sign(algorithm);
         } catch (UnsupportedEncodingException e) {

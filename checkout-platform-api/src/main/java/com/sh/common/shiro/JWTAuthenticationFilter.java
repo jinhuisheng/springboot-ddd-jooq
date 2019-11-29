@@ -1,4 +1,4 @@
-package com.sh.employee.shiro;
+package com.sh.common.shiro;
 
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.slf4j.Logger;
@@ -87,7 +87,7 @@ public class JWTAuthenticationFilter extends BasicHttpAuthenticationFilter {
     private void response401(ServletRequest req, ServletResponse resp) {
         try {
             HttpServletResponse httpServletResponse = (HttpServletResponse) resp;
-            httpServletResponse.sendRedirect("/401");
+            httpServletResponse.sendRedirect("/employee/login/401");
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }

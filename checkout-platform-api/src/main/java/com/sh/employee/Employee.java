@@ -1,8 +1,8 @@
 package com.sh.employee;
 
 import com.sh.common.ddd.AggregateRoot;
+import com.sh.common.ddd.BaseEntity;
 import lombok.Getter;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -15,11 +15,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "employee")
 @Getter
-public class Employee implements AggregateRoot {
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+public class Employee extends BaseEntity implements AggregateRoot {
     /**
      * 账号
      */

@@ -2,7 +2,6 @@ package com.sh.order.model;
 
 import com.sh.common.ddd.AggregateRoot;
 import com.sh.common.utils.Address;
-import com.sh.order.exception.OrderCannotBeModifiedException;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -54,18 +53,6 @@ public class Order implements AggregateRoot {
 
     }
 
-    public void changeProductCount(String productId, int count) {
-        if (this.status == PAID) {
-            throw new OrderCannotBeModifiedException(this.id);
-        }
-
-        OrderItem orderItem = retrieveItem(productId);
-
-        orderItem.updateCount(count);
-
-        this.totalPrice = calculateTotalPrice();
-    }
-
     private OrderItem retrieveItem(String productId) {
         return items.stream()
                 .filter(item -> item.getProductId().equals(productId))
@@ -79,13 +66,6 @@ public class Order implements AggregateRoot {
         this.status = PAID;
     }
 
-    public void changeAddressDetail(String detail) {
-        if (this.status == PAID) {
-            throw new OrderCannotBeModifiedException(this.id);
-        }
-
-//        this.address = this.address.changeDetailTo(detail);
-    }
 
     public String getId() {
         return id;

@@ -1,8 +1,9 @@
-package com.sh.employee.shiro;
+package com.sh.common.shiro;
 
+import com.sh.common.utils.JWTUtil;
 import com.sh.employee.EmployeeApplicationService;
-import com.sh.employee.JWTUtil;
 import com.sh.employee.representation.EmployeeRepresentation;
+import com.sh.role.RoleApplicationService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -21,10 +22,13 @@ import java.util.*;
 public class MyAuthorizingRealm extends AuthorizingRealm {
 
     private EmployeeApplicationService employeeApplicationService;
+    private RoleApplicationService roleApplicationService;
 
     @Autowired
-    public void setEmployeeApplicationService(EmployeeApplicationService employeeApplicationService) {
+    public MyAuthorizingRealm(EmployeeApplicationService employeeApplicationService
+            , RoleApplicationService roleApplicationService) {
         this.employeeApplicationService = employeeApplicationService;
+        this.roleApplicationService = roleApplicationService;
     }
 
     /**
@@ -41,8 +45,9 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        String userId = JWTUtil.getUserId(principals.toString());
-        Set<String> permissions = employeeApplicationService.getPermissions(userId);
+        String roleId = JWTUtil.getRoleId(principals.toString());
+        String clientType = JWTUtil.getClientType(principals.toString());
+        Set<String> permissions = roleApplicationService.getPermissions(roleId, clientType);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.addStringPermissions(permissions);
         return simpleAuthorizationInfo;
@@ -66,7 +71,7 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
         }
 
         if (!JWTUtil.verify(token, userId, employee.getPassword())) {
-            throw new AuthenticationException("Username or password error");
+            throw new AuthenticationException("UserId or ClientType error");
         }
 
         return new SimpleAuthenticationInfo(token, token, "my_realm");

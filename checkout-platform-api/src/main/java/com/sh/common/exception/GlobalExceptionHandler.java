@@ -1,9 +1,11 @@
 package com.sh.common.exception;
 
 import com.sh.common.logging.AutoNamingLoggerFactory;
+import com.sh.common.utils.ResponseUtils;
+import com.sh.common.utils.RestResult;
 import org.slf4j.Logger;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,50 +13,50 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.sh.common.exception.ErrorDetail.from;
-import static org.springframework.util.ObjectUtils.isEmpty;
-
-
+/**
+ * @author huisheng.jin
+ * @version 2019/04/12
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private Logger logger = AutoNamingLoggerFactory.getLogger();
+    private static final Logger logger = AutoNamingLoggerFactory.getLogger();
 
-    @ExceptionHandler(AppException.class)
+    /**
+     * 统一处理请求参数无效的情况
+     * 针对情况：@Valid 验证入参对象字段不符合条件 获取BindingResult错误信息
+     *
+     * @param ex 方法参数无效异常
+     * @return
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseEntity<?> handleAppException(AppException ex, HttpServletRequest request) {
-        logger.error("App error:", ex);
-        ErrorRepresentation representation = ErrorRepresentation.from(from(ex, request.getRequestURI()));
-        return new ResponseEntity<>(representation, new HttpHeaders(), representation.httpStatus());
+    public RestResult handleArgumentInvalidException(MethodArgumentNotValidException ex) {
+        logger.error("------handleArgumentInvalidException ,error:\r\n {}", ex);
+        BindingResult result = ex.getBindingResult();
+        List<FieldError> fieldErrors = result.getFieldErrors();
+        List<String> errorMessages = fieldErrors.stream()
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.toList());
+
+        //取第一个错误信息
+        return RestResult.failure(errorMessages.get(0));
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    @ResponseBody
-    public ResponseEntity<ErrorRepresentation> handleInvalidRequest(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        String path = request.getRequestURI();
-
-        Map<String, Object> error = ex.getBindingResult().getFieldErrors().stream()
-                .collect(Collectors.toMap(FieldError::getField, fieldError -> {
-                    String message = fieldError.getDefaultMessage();
-                    return isEmpty(message) ? "无错误提示" : message;
-                }));
-
-        logger.error("Validation error for [{}]:{}", ex.getParameter().getParameterType().getName(), error);
-        ErrorRepresentation representation = ErrorRepresentation.from(from(new RequestValidationException(error), path));
-        return new ResponseEntity<>(representation, new HttpHeaders(), representation.httpStatus());
+    @ExceptionHandler(value = Exception.class)
+    public Object defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        logger.error("------defaultErrorHandler ,url={},error:\r\n {}", request.getRequestURL(), ex);
+        restApiErrorHandler(response, ex);
+        return null;
     }
 
-
-    @ExceptionHandler(Throwable.class)
-    @ResponseBody
-    public ResponseEntity<?> handleGeneralException(Throwable ex, HttpServletRequest request) {
-        String path = request.getRequestURI();
-        logger.error("Error occurred while access[{}]:", path, ex);
-        ErrorRepresentation representation = ErrorRepresentation.from(from(new SystemException(ex), path));
-        return new ResponseEntity<>(representation, new HttpHeaders(), representation.httpStatus());
+    private void restApiErrorHandler(HttpServletResponse response, Exception ex) {
+        ResponseUtils.setResponse(response
+                , HttpStatus.OK.value()
+                , RestResult.failure(HttpStatus.INTERNAL_SERVER_ERROR.value() + "", ex.getMessage()));
     }
-
 
 }

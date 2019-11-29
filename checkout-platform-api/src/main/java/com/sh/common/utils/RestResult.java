@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 
@@ -19,7 +20,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestResult<T> extends RequestIdAwareRepresentation {
+public class RestResult<T> extends RequestIdAwareRepresentation implements Serializable {
     /**
      * code码,0:成功,不为0:失败
      * 系统级别的状态，应该在全局统一定义使用。
