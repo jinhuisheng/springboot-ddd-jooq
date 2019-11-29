@@ -1,9 +1,10 @@
 package com.sh.employee.representation;
 
-import co.cantina.spring.jooq.sample.model.Tables;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import static co.cantina.spring.jooq.sample.model.Tables.*;
 
 
 @Component
@@ -17,8 +18,11 @@ public class EmployeeRepresentationService {
     }
 
     public EmployeeRepresentation byId(String id) {
-        return dsl.selectFrom(Tables.EMPLOYEE)
-                .where(Tables.EMPLOYEE.ID.eq(id))
+        return dsl.select()
+                .from(EMPLOYEE)
+                .leftJoin(SYS_ROLE)
+                .on(EMPLOYEE.ROLE_ID.eq(SYS_ROLE.ID))
+                .where(EMPLOYEE.ID.eq(id))
                 .fetch()
                 .map(record -> record.into(EmployeeRepresentation.class))
                 .get(0);

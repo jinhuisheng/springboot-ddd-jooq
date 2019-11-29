@@ -1,19 +1,13 @@
-package com.sh.role.model;
+package com.sh.role;
 
-import com.sh.common.ddd.BaseEntity;
 import lombok.Getter;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 /**
  * @author huisheng.jin
- * @version 2019/11/28.
+ * @version 2019/11/29.
  */
-@Entity
 @Getter
-@Table(name = "sys_permission")
-public class Permission extends BaseEntity {
+public class RolePermissionRepresentation {
     /**
      * 权限名称
      */
@@ -38,4 +32,5 @@ public class Permission extends BaseEntity {
      * 权限类型(客户端:client;浏览器:browser)
      */
     private String permissionType;
+
 }

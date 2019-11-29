@@ -2,11 +2,8 @@ package com.sh.employee;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.sh.employee.Employee;
-import com.sh.employee.QEmployee;
 
-import javax.validation.constraints.NotBlank;
+import static com.sh.employee.QEmployee.*;
 
 /**
  * @author huisheng.jin
@@ -14,12 +11,8 @@ import javax.validation.constraints.NotBlank;
  */
 public class EmployeeSpecification {
     public static Predicate byAccountNumberAndWorkNumber(String accountNumber, String workNumber) {
-        QEmployee employee = QEmployee.employee;
-        BooleanExpression eqAccountNumber = employee.accountNumber.eq(accountNumber);
-        BooleanExpression eqWorkNumber = employee.accountNumber.eq(workNumber);
-
         return new BooleanBuilder()
-                .and(eqAccountNumber)
-                .and(eqWorkNumber);
+                .and(employee.accountNumber.eq(accountNumber))
+                .and(employee.workNumber.eq(workNumber));
     }
 }

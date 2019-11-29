@@ -1,8 +1,8 @@
 package com.sh.common.shiro;
 
 import com.sh.common.utils.JWTUtil;
-import com.sh.employee.EmployeeApplicationService;
 import com.sh.employee.representation.EmployeeRepresentation;
+import com.sh.employee.representation.EmployeeRepresentationService;
 import com.sh.role.RoleApplicationService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -21,13 +21,13 @@ import java.util.*;
 @Service
 public class MyAuthorizingRealm extends AuthorizingRealm {
 
-    private EmployeeApplicationService employeeApplicationService;
+    private EmployeeRepresentationService employeeRepresentationService;
     private RoleApplicationService roleApplicationService;
 
     @Autowired
-    public MyAuthorizingRealm(EmployeeApplicationService employeeApplicationService
+    public MyAuthorizingRealm(EmployeeRepresentationService employeeRepresentationService
             , RoleApplicationService roleApplicationService) {
-        this.employeeApplicationService = employeeApplicationService;
+        this.employeeRepresentationService = employeeRepresentationService;
         this.roleApplicationService = roleApplicationService;
     }
 
@@ -47,7 +47,7 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String roleId = JWTUtil.getRoleId(principals.toString());
         String clientType = JWTUtil.getClientType(principals.toString());
-        Set<String> permissions = roleApplicationService.getPermissions(roleId, clientType);
+        Set<String> permissions = roleApplicationService.getPermissions(roleId, clientType).getPermissionList();
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.addStringPermissions(permissions);
         return simpleAuthorizationInfo;
@@ -65,7 +65,7 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
             throw new AuthenticationException("token invalid");
         }
 
-        EmployeeRepresentation employee = employeeApplicationService.byId(userId);
+        EmployeeRepresentation employee = employeeRepresentationService.byId(userId);
         if (Objects.isNull(employee)) {
             throw new AuthenticationException("User didn't existed!");
         }

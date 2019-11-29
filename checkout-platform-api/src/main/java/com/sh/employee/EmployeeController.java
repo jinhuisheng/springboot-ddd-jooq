@@ -3,6 +3,7 @@ package com.sh.employee;
 import com.sh.common.logging.AutoNamingLoggerFactory;
 import com.sh.common.utils.RestResult;
 import com.sh.common.utils.RestResultCode;
+import com.sh.employee.representation.EmployeeRepresentationService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -15,13 +16,16 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/employee/")
-public class LoginController {
+public class EmployeeController {
     private Logger logger = AutoNamingLoggerFactory.getLogger();
 
+    private EmployeeRepresentationService employeeRepresentationService;
     private EmployeeApplicationService employeeApplicationService;
 
     @Autowired
-    public LoginController(EmployeeApplicationService employeeApplicationService) {
+    public EmployeeController(EmployeeRepresentationService employeeRepresentationService
+            , EmployeeApplicationService employeeApplicationService) {
+        this.employeeRepresentationService = employeeRepresentationService;
         this.employeeApplicationService = employeeApplicationService;
     }
 
@@ -30,9 +34,9 @@ public class LoginController {
         return employeeApplicationService.login(loginCommand);
     }
 
-    @GetMapping("/byId/{id}")
+    @GetMapping("/{id}")
     public RestResult getUser(@PathVariable(name = "id") String id) {
-        return RestResult.success(employeeApplicationService.byId(id));
+        return RestResult.success(employeeRepresentationService.byId(id));
     }
 
     @GetMapping("/article")
@@ -53,7 +57,6 @@ public class LoginController {
 
     @RequestMapping(path = "/login/401")
     public RestResult unauthorized() {
-        logger.info("unauthorized log test");
         return RestResult.failure(RestResultCode.UNAUTHORIZED, "未授权");
     }
 }

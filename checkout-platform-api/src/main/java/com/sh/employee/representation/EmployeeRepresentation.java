@@ -29,9 +29,9 @@ public class EmployeeRepresentation implements Representation {
      */
     private String roleId;
     /**
-     * 密码(前后端加密 todo)
+     * 角色名称
      */
-    private String password;
+    private String roleName;
     /**
      * 门店Id（所属门店）
      */
@@ -48,5 +48,7 @@ public class EmployeeRepresentation implements Representation {
      * 商户Id
      */
     private Long merchantId;
+
+    private String password;
 }
 

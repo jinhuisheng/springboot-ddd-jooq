@@ -2,10 +2,9 @@ package com.sh.role.model;
 
 import com.sh.common.ddd.BaseEntity;
 import lombok.Getter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,14 +13,15 @@ import java.util.List;
  */
 @Entity
 @Getter
-@Table(name = "role")
+@Table(name = "sys_role")
 public class Role extends BaseEntity {
     /**
      * 角色名称
      */
     private String roleName;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SELECT)
-    @JoinColumn(name = "role_id")
-    private List<Permission> permissions;
+    @ManyToMany
+    @JoinTable(name = "sys_role_permission", joinColumns = {
+            @JoinColumn(name = "role_id")
+    }, inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private List<Permission> permissions = new ArrayList<>();
 }

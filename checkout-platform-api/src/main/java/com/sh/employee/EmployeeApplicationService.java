@@ -5,12 +5,9 @@ import com.sh.common.logging.AutoNamingLoggerFactory;
 import com.sh.common.utils.JWTSignInput;
 import com.sh.common.utils.JWTUtil;
 import com.sh.common.utils.RestResult;
-import com.sh.employee.representation.EmployeeRepresentation;
-import com.sh.employee.representation.EmployeeRepresentationService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -22,20 +19,12 @@ import java.util.*;
 public class EmployeeApplicationService {
 
     private Logger logger = AutoNamingLoggerFactory.getLogger();
-
-    private EmployeeRepresentationService employeeRepresentationService;
     private EmployeeRepository employeeRepository;
 
 
     @Autowired
-    public EmployeeApplicationService(EmployeeRepresentationService employeeRepresentationService, EmployeeRepository employeeRepository) {
-        this.employeeRepresentationService = employeeRepresentationService;
+    public EmployeeApplicationService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
-    }
-
-    @Transactional(readOnly = true)
-    public EmployeeRepresentation byId(String id) {
-        return employeeRepresentationService.byId(id);
     }
 
     public RestResult login(LoginCommand loginCommand) {
