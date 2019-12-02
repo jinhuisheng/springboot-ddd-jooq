@@ -24,6 +24,7 @@ public abstract class BaseEntity implements com.sh.common.ddd.Entity {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(length = 36)
     private String id;
 
     @CreatedDate
