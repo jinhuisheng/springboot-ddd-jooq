@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 10875
 spring:
   datasource:
     url: jdbc:mysql://10.8.210.11:3306/checkout_platform?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
