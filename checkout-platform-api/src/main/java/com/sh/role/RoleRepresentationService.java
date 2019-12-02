@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static co.cantina.spring.jooq.sample.model.Tables.*;
+import static com.sh.jooq.Tables.*;
 
 /**
  * @author huisheng.jin

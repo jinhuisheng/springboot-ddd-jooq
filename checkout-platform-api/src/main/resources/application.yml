@@ -5,9 +5,6 @@ spring:
     url: jdbc:mysql://10.8.210.11:3306/checkout_platform?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: 1q2w3e
-#    url: jdbc:mysql://localhost/springjooq?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false
-#    username: root
-#    password:
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -30,5 +27,5 @@ logging:
   pattern:
     console: "%date{yyyy-MM-dd HH:mm:ss.SSS,Asia/Shanghai} %X{requestId}-%X{userId} %highlight(%-5level) %logger{36} : %m%n%wEx"
     file: "%date{yyyy-MM-dd HH:mm:ss.SSS,Asia/Shanghai} %X{requestId}-%X{userId} %highlight(%-5level) %logger{36} : %m%n%wEx"
-  path: /data/application/restaurant/logs/
-  file: /data/application/restaurant/logs/restaurant-service.log
+  path: /data/application/checkout_platform-api/logs/
+  file: /data/application/checkout_platform-api/logs/checkout_platform-service.log
